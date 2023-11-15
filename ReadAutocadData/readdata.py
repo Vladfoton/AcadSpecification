@@ -14,7 +14,9 @@ aDoc = app.ActiveDocument
 msp = aDoc.ModelSpace
 
 
-def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1"):
+def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1") -> \
+        list[tuple(str, str)]:
+
     sset = aDoc.PickfirstSelectionSet
     rezult = []
     for t in sset:
