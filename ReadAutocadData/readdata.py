@@ -15,36 +15,49 @@ aDoc = app.ActiveDocument
 msp = aDoc.ModelSpace
 sset = aDoc.PickfirstSelectionSet
 
-def find_and_read_parameters(EntityName="AcDbBlockReference", EffectiveName="parameters"):
-    rezult = []
-    for t in sset:
-        if t.EntityName == EntityName and t.EffectiveName == EffectiveName:
-            rezult.append(t)
+def find_and_read_parameters(sset):
+    parameter_list = []
+    list_poz = []
+    for acad_obj in sset:
+        if acad_obj.EntityName == "AcDbBlockReference":
+            if acad_obj.EffectiveName == "parameters":
+                parameter_list.append(acad_obj)
+            elif acad_obj.EffectiveName == "Мультивыноска v1.1":
+                str1 = acad_obj.GetAttributes()[0].TextString
+                str2 = acad_obj.GetAttributes()[1].TextString
+                print(str1, str2)
+                list_poz.append(f'{str1}\P{str2}' if str2 else str1)
+        elif acad_obj.EntityName == "AcDbMLeader":
+            str1 = acad_obj.TextString
+            print(str1)
+            list_poz.append(str1)
 
-    if len(rezult) == 1:
-        return Parameters({atr_data.TagString: atr_data.TextString for atr_data in rezult.pop(0).GetAttributes()})
+    if len(parameter_list) == 1:
+        temp = Parameters({atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
+        temp.list_poz = list_poz
+        return temp
 
     else:
-        raise ValueError(f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(rezult)}')
+        raise ValueError(f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(parameter_list)}')
 
 
 
 def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1") -> list:
 
     sset = aDoc.PickfirstSelectionSet
-    rezult = []
+    list_poz = []
     for t in sset:
         if t.EntityName in EntityName[0] and t.EffectiveName == EffectiveName:
             str1 = t.GetAttributes()[0].TextString
             str2 = t.GetAttributes()[1].TextString
             print(str1, str2)
-            rezult.append((str1, str2))
+            list_poz.append((str1, str2))
         elif t.EntityName == EntityName[1]:
             str1 = t.TextString
             str2 = ""
             print(str1, str2)
-            rezult.append((str1, str2))
-    return rezult
+            list_poz.append((str1, str2))
+    return list_poz
 
 
 def read_path_file(path, filename, newPath=""):
@@ -121,9 +134,11 @@ def create_xlsx():
 
 
 if __name__ == '__main__':
-    pp = find_and_read_parameters()
-    for i in dir(pp):
+    const_element = find_and_read_parameters(sset)
+
+
+    for i in dir(const_element):
         if "__" not in i:
-            print(i, pp.__getattribute__(i), type(pp.__getattribute__(i)), sep=" --> ")
+            print(i, const_element.__getattribute__(i), type(const_element.__getattribute__(i)), sep=" --> ")
 
 
