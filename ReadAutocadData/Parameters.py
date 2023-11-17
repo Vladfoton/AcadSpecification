@@ -15,23 +15,20 @@ class Parameters:
                 temp[sufix] = (standart, klass)
 
             self.arm_standart = temp
-        except :
+        except:
             raise ValueError('Ошибка в блоке параметров в атрибуте "arm_standart"')
 
-    def __add__(self,other):
+    def __add__(self, other):
         if isinstance(other, self.__class__):
-
             self.list_poz.extend(other.list_poz)
             # print("функция __add__", self.list_poz)
             return self
+    # TODO Добавить сравнение объектов и сделать суммирование только если данные с одного конструктивного элемента
+    # TODO переделать список данных в словарь с ключом level и суммирование по ключу
 
-    def add_list_poz(self,list_poz):
+    def add_list_poz(self, list_poz):
         # print("функция add_list_poz")
         self.list_poz = list_poz
-
-
-#TODO Добавить сравнение объектов и сделать суммирование только если данные с одного конструктивного элемента
-
 
 
 
@@ -47,27 +44,8 @@ class Parameters:
         except:
             self.__dict__[key] = value
 
-
-
-
-
-    # def find_and_read_parameters(self):
-    #     print(self.acad_block_parameters.GetAttributes())
-    #     return {atr_data.TagString: atr_data.TextString for atr_data in self.acad_block_parameters.GetAttributes()}
-
-
-
-    @staticmethod
-    def set_arm_standart(arm_standart:str)->dict:
-        return {arm_data[0]: (arm_data[1], arm_data[2]) for arm_data in arm_standart.split(',')}
-
-        pass
-
     def __str__(self):
         pass
-
-    # def add(self, textstring: str):
-    #     pass
 
 
 if __name__ == '__main__':
