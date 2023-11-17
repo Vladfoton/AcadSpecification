@@ -12,10 +12,24 @@ import win32com.client
 app = win32com.client.Dispatch("AutoCAD.Application")
 aDoc = app.ActiveDocument
 msp = aDoc.ModelSpace
+sset = aDoc.PickfirstSelectionSet
+
+def find_and_read_parameters(EntityName="AcDbBlockReference", EffectiveName="parameters"):
+    parameter_list = ('level', 'specification_head', 'vrs_type', 'specification_type', 'vd_file_name', 'multiplevrs', 'projectcode', 'arm_standart', 'constr_name')
+    rezult = []
+    for t in sset:
+        if t.EntityName == EntityName and t.EffectiveName == EffectiveName:
+            rezult.append(t)
+
+    if len(rezult) == 1:
+        return {atr_data.TagString: atr_data.TextString for atr_data in rezult.pop(0).GetAttributes()}
+
+    else:
+        raise ValueError(f'количество блоков параметров не равно 1. Количество найденных блоков {len(rezult)}')
 
 
-def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1") -> \
-        list[tuple(str, str)]:
+
+def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1") -> list:
 
     sset = aDoc.PickfirstSelectionSet
     rezult = []
@@ -107,4 +121,4 @@ def create_xlsx():
 
 
 if __name__ == '__main__':
-    create_xlsx()
+    find_and_read_parameters()
