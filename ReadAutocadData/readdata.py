@@ -135,9 +135,7 @@ def create_xlsx():
 
 if __name__ == '__main__':
     const_element = find_and_read_parameters(sset)
-    const_element += const_element
-
-
+    const_element = const_element+ const_element
     for i in dir(const_element):
         if "__" not in i:
             print(i, const_element.__getattribute__(i), type(const_element.__getattribute__(i)), sep=" --> ")

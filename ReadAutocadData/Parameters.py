@@ -22,10 +22,11 @@ class Parameters:
         if isinstance(other, self.__class__):
 
             self.list_poz.extend(other.list_poz)
-            print("функция __add__", self.list_poz)
+            # print("функция __add__", self.list_poz)
+            return self
 
     def add_list_poz(self,list_poz):
-        print("функция add_list_poz")
+        # print("функция add_list_poz")
         self.list_poz = list_poz
 
 
@@ -65,8 +66,8 @@ class Parameters:
     def __str__(self):
         pass
 
-    def add(self, textstring: str):
-        pass
+    # def add(self, textstring: str):
+    #     pass
 
 
 if __name__ == '__main__':
