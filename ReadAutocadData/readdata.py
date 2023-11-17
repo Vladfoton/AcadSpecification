@@ -25,7 +25,7 @@ def find_and_read_parameters(EntityName="AcDbBlockReference", EffectiveName="par
         return Parameters({atr_data.TagString: atr_data.TextString for atr_data in rezult.pop(0).GetAttributes()})
 
     else:
-        raise ValueError(f'количество блоков параметров не равно 1. Количество найденных блоков {len(rezult)}')
+        raise ValueError(f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(rezult)}')
 
 
 
@@ -123,6 +123,7 @@ def create_xlsx():
 if __name__ == '__main__':
     pp = find_and_read_parameters()
     for i in dir(pp):
-        print((i, pp.__getattribute__(i)) if "__" not in i else "", end ='')
+        if "__" not in i:
+            print(i, pp.__getattribute__(i), type(pp.__getattribute__(i)), sep=" --> ")
 
 

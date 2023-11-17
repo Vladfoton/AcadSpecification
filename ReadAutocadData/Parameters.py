@@ -4,7 +4,19 @@ import win32com.client
 class Parameters:
     def __init__(self, acad_block_parameters: dict):
         for key, value in acad_block_parameters.items():
-            self.__setattr__(key, value)
+            self.__setattr__(key.lower(), value)
+        temp = {}
+        try:
+            for poz in self.arm_standart.split(';'):
+                sufix, data = poz.split(':')
+                standart, klass = data.split(',')
+                standart = standart[1:]
+                klass = klass[:-1]
+                temp[sufix] = (standart, klass)
+
+            self.arm_standart = temp
+        except :
+            raise ValueError('Ошибка в блоке параметров в атрибуте "arm_standart"')
 
 
     def __setattr__(self, key, value):
