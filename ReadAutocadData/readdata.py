@@ -26,7 +26,7 @@ def find_and_read_parameters(sset):
                 str1 = acad_obj.GetAttributes()[0].TextString
                 str2 = acad_obj.GetAttributes()[1].TextString
                 print(str1, str2)
-                list_poz.append(f'{str1}\P{str2}' if str2 else str1)
+                list_poz.append(f'{str1}\\P{str2}' if str2 else str1)
         elif acad_obj.EntityName == "AcDbMLeader":
             str1 = acad_obj.TextString
             print(str1)
@@ -34,7 +34,7 @@ def find_and_read_parameters(sset):
 
     if len(parameter_list) == 1:
         temp = Parameters({atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
-        temp.list_poz = list_poz
+        temp.add_list_poz(list_poz)
         return temp
 
     else:
@@ -135,6 +135,7 @@ def create_xlsx():
 
 if __name__ == '__main__':
     const_element = find_and_read_parameters(sset)
+    const_element += const_element
 
 
     for i in dir(const_element):

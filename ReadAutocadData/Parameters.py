@@ -18,6 +18,21 @@ class Parameters:
         except :
             raise ValueError('Ошибка в блоке параметров в атрибуте "arm_standart"')
 
+    def __add__(self,other):
+        if isinstance(other, self.__class__):
+
+            self.list_poz.extend(other.list_poz)
+            print("функция __add__", self.list_poz)
+
+    def add_list_poz(self,list_poz):
+        print("функция add_list_poz")
+        self.list_poz = list_poz
+
+
+#TODO Добавить сравнение объектов и сделать суммирование только если данные с одного конструктивного элемента
+
+
+
 
     def __setattr__(self, key, value):
         try:
