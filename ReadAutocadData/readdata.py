@@ -135,14 +135,20 @@ def create_xlsx():
 
 
 if __name__ == '__main__':
-    const_element = find_and_read_parameters(sset)
-    const_element1 = copy.deepcopy(const_element)
-    print(const_element == const_element1)
-    # const_element1.constr_name = 'Диафрагма Д1'
-    print(const_element == const_element1)
-    const_element += const_element1
-    for i in dir(const_element):
-        if "__" not in i:
-            print(i, const_element.__getattribute__(i), type(const_element.__getattribute__(i)), sep=" --> ")
+    elem_list =[]
+    for _ in range(2):
+        input('Выбери следующую группу элементов и нажми ENTER')
+        sset = aDoc.PickfirstSelectionSet
+        const_element = find_and_read_parameters(sset)
+        if const_element in elem_list:
+            elem_list[elem_list.index(const_element)] += const_element
+        else:
+            elem_list.append(const_element)
+
+
+    for element in elem_list:
+        for i in dir(element):
+            if "__" not in i:
+                print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
 
 
