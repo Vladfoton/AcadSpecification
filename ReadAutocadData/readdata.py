@@ -4,7 +4,7 @@
 поз. "AcDbMLeader" (Стандартная выноска Autocad) и выводит их содержимое в файл exls
 
 '''
-
+import copy
 import os
 import pathlib
 import win32com.client
@@ -34,6 +34,7 @@ def find_and_read_parameters(sset):
 
     if len(parameter_list) == 1:
         temp = Parameters({atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
+        list_poz = {temp.level:[(temp.multiple_data, list_poz)]}
         temp.add_list_poz(list_poz)
         return temp
 
@@ -135,7 +136,11 @@ def create_xlsx():
 
 if __name__ == '__main__':
     const_element = find_and_read_parameters(sset)
-    const_element = const_element+ const_element
+    const_element1 = copy.deepcopy(const_element)
+    print(const_element == const_element1)
+    # const_element1.constr_name = 'Диафрагма Д1'
+    print(const_element == const_element1)
+    const_element += const_element1
     for i in dir(const_element):
         if "__" not in i:
             print(i, const_element.__getattribute__(i), type(const_element.__getattribute__(i)), sep=" --> ")
