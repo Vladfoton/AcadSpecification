@@ -136,7 +136,8 @@ def create_xlsx():
 
 if __name__ == '__main__':
     elem_list =[]
-    for _ in range(2):
+    n = int(input('Количество участков : '))
+    for _ in range(n):
         input('Выбери следующую группу элементов и нажми ENTER')
         sset = aDoc.PickfirstSelectionSet
         const_element = find_and_read_parameters(sset)
@@ -147,8 +148,9 @@ if __name__ == '__main__':
 
 
     for element in elem_list:
-        for i in dir(element):
-            if "__" not in i:
-                print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
+        print(f'Марка конструкции : {element.constr_name}')
+        print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
+        # if "__" not in i:
+        #     print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
 
 
