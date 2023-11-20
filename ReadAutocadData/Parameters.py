@@ -26,30 +26,30 @@ class Parameters:
                 self.list_poz[other.level] = [(other.multiple_data, other.list_poz[other.level][0][1])]
             # print("функция __add__", self.list_poz)
             return self
-        else: # Если объекты не совместимы то возвращает игнорирует суммирование и возвращает исходный объект
+        else:  # Если объекты не совместимы или отличаются параметры (имя конструкции, коэффициэнт умножения для ВРС,
+            # шифр, стандарт арматуры,...то игнорирует суммирование и возвращает исходный объект
             return self
 
     def __eq__(self, other):
-        atr_list = ('constr_name', 'multiplevrs', 'projectcode', 'arm_standart', 'multiplevrs','specification_head', 'specification_type', 'vd_file_name', 'vrs_type')
+        atr_list = ('constr_name', 'multiplevrs', 'projectcode', 'arm_standart', 'multiplevrs', 'specification_head',
+                    'specification_type', 'vd_file_name',
+                    'vrs_type')  # Список атрибутов при равенстве которых будет считаться что объекты равны
         return all(self.__getattribute__(i) == other.__getattribute__(i) for i in atr_list)
-    # TODO Добавить сравнение объектов и сделать суммирование только если данные с одного конструктивного элемента
-    # TODO переделать список данных в словарь с ключом level и суммирование по ключу
 
-    def add_list_poz(self, list_poz:dict):
+    def add_list_poz(self, list_poz: dict):
         # print("функция add_list_poz")
         self.list_poz = list_poz
-
-
 
     def __setattr__(self, key, value):
         try:
             if '.' in value:
                 self.__dict__[key] = float(value)
+            elif value in ('0', '1', True, False):
+                self.__dict__[key] = bool(value)
+            elif value.isdigit():
+                self.__dict__[key] = int(value)
             else:
-                if value.isdigit():
-                    self.__dict__[key] = bool(value)
-                else:
-                    self.__dict__[key] = value
+                self.__dict__[key] = value
         except:
             self.__dict__[key] = value
 
