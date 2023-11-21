@@ -17,6 +17,13 @@ class Parameters:
             self.arm_standart = temp
         except:
             raise ValueError('Ошибка в блоке параметров в атрибуте "arm_standart"')
+        try:
+            self.p1_coord = tuple(float(i) for i in self.p1_coord.split(", "))
+            self.p2_coord = tuple(float(i) for i in self.p2_coord.split(", "))
+            self.p3_coord = tuple(float(i) for i in self.p3_coord.split(", "))
+            self.p4_coord = tuple(float(i) for i in self.p4_coord.split(", "))
+        except:
+            raise ValueError('Ошибка в координатах контура')
 
     def __add__(self, other):
         if isinstance(other, self.__class__) and self == other:
