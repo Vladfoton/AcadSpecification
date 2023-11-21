@@ -29,7 +29,7 @@ class Parameters:
     def __add__(self, other):
         if isinstance(other, self.__class__) and self == other:
             if other.level in self.list_poz:
-                self.list_poz[self.level].append((other.multiple_data, other.list_poz[other.level][0][1]))
+                self.list_poz[other.level].append((other.multiple_data, other.list_poz[other.level][0][1]))
             else:
                 self.list_poz[other.level] = [(other.multiple_data, other.list_poz[other.level][0][1])]
             # print("функция __add__", self.list_poz)

@@ -19,7 +19,7 @@ msp = aDoc.ModelSpace
 # sset = aDoc.PickfirstSelectionSet
 
 
-def find_and_read_parameters(sset):
+def find_and_read_parameters(sset) -> Parameters:
     parameter_list = []
     for acad_obj in sset:
         if acad_obj.EntityName == "AcDbBlockReference":
@@ -61,10 +61,12 @@ if __name__ == '__main__':
     elem_list = []
     n = int(input('Количество участков : '))
     for _ in range(n):
+
         input('Выбери следующую группу элементов и нажми ENTER')
         sset = aDoc.PickfirstSelectionSet
         const_element = find_and_read_parameters(sset)
         if const_element in elem_list:
+            print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
             elem_list[elem_list.index(const_element)] += const_element
         else:
             elem_list.append(const_element)
