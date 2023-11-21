@@ -1,10 +1,13 @@
 import win32com.client
+from read_autocad_data_by_polygon import select_object_in_rect
+import pythoncom
 
 
 class Parameters:
     def __init__(self, acad_block_parameters: dict):
         for key, value in acad_block_parameters.items():
             self.__setattr__(key.lower(), value)
+        #Формирование словаря с обозначениями и стандартами и классами
         temp = {}
         try:
             for poz in self.arm_standart.split(';'):
@@ -17,11 +20,9 @@ class Parameters:
             self.arm_standart = temp
         except:
             raise ValueError('Ошибка в блоке параметров в атрибуте "arm_standart"')
+        # формирование списка точек контура
         try:
-            self.p1_coord = tuple(float(i) for i in self.p1_coord.split(", "))
-            self.p2_coord = tuple(float(i) for i in self.p2_coord.split(", "))
-            self.p3_coord = tuple(float(i) for i in self.p3_coord.split(", "))
-            self.p4_coord = tuple(float(i) for i in self.p4_coord.split(", "))
+            self.contour = [float(i) for i in self.p1_coord.split(", ")] + [float(i) for i in self.p2_coord.split(", ")] + [float(i) for i in self.p3_coord.split(", ")] + [float(i) for i in self.p4_coord.split(", ")] + [float(i) for i in self.p1_coord.split(", ")]
         except:
             raise ValueError('Ошибка в координатах контура')
 

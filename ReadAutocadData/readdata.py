@@ -21,24 +21,15 @@ msp = aDoc.ModelSpace
 
 def find_and_read_parameters(sset):
     parameter_list = []
-    list_poz = []
     for acad_obj in sset:
         if acad_obj.EntityName == "AcDbBlockReference":
             if acad_obj.EffectiveName == "parameters":
                 parameter_list.append(acad_obj)
-            elif acad_obj.EffectiveName == "Мультивыноска v1.1":
-                str1 = acad_obj.GetAttributes()[0].TextString
-                str2 = acad_obj.GetAttributes()[1].TextString
-                print(str1, str2)
-                list_poz.append(f'{str1}\\P{str2}' if str2 else str1)
-        elif acad_obj.EntityName == "AcDbMLeader":
-            str1 = acad_obj.TextString
-            print(str1)
-            list_poz.append(str1)
 
     if len(parameter_list) == 1:
         temp = Parameters(
             {atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
+        list_poz = select_object_in_rect(temp.contour)
         list_poz = {temp.level: [(temp.multiple_data, list_poz)]}
         temp.add_list_poz(list_poz)
         return temp
@@ -56,12 +47,12 @@ def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
         if t.EntityName in EntityName[0] and t.EffectiveName == EffectiveName:
             str1 = t.GetAttributes()[0].TextString
             str2 = t.GetAttributes()[1].TextString
-            print(str1, str2)
+            # print(str1, str2)
             list_poz.append((str1, str2))
         elif t.EntityName == EntityName[1]:
             str1 = t.TextString
             str2 = ""
-            print(str1, str2)
+            # print(str1, str2)
             list_poz.append((str1, str2))
     return list_poz
 
@@ -81,6 +72,6 @@ if __name__ == '__main__':
     for element in elem_list:
         print(f'Марка конструкции : {element.constr_name}')
         print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
-        print(f'{element.p1_coord=}, {type(element.p1_coord[0])}')
+        # print(f'{element.contour=}, {type(element.contour[0])}')
         # if "__" not in i:
         #     print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
