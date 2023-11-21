@@ -7,7 +7,9 @@ import pythoncom
 acad = win32com.client.Dispatch("AutoCAD.Application")
 acadDoc = acad.ActiveDocument
 acadModel = acad.ActiveDocument.ModelSpace
-def select_object_in_rect(p1:tuple,p2:tuple,p3:tuple,p4:tuple):
+
+
+def select_object_in_rect(p1: tuple, p2: tuple, p3: tuple, p4: tuple):
     def APoint(x, y, z=0):
         return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, (x, y, z))
 
@@ -31,5 +33,5 @@ def select_object_in_rect(p1:tuple,p2:tuple,p3:tuple,p4:tuple):
 
 
 if __name__ == '__main__':
-    select_object_in_rect((0,0,0), (25000,0,0), (25000,10000,0), (0,10000,0))
+    select_object_in_rect((0, 0, 0), (25000, 0, 0), (25000, 10000, 0), (0, 10000, 0))
     pass

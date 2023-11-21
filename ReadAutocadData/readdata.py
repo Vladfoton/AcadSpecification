@@ -14,6 +14,8 @@ from read_autocad_data_by_polygon import select_object_in_rect
 app = win32com.client.Dispatch("AutoCAD.Application")
 aDoc = app.ActiveDocument
 msp = aDoc.ModelSpace
+
+
 # sset = aDoc.PickfirstSelectionSet
 
 
@@ -35,18 +37,19 @@ def find_and_read_parameters(sset):
             list_poz.append(str1)
 
     if len(parameter_list) == 1:
-        temp = Parameters({atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
-        list_poz = {temp.level:[(temp.multiple_data, list_poz)]}
+        temp = Parameters(
+            {atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
+        list_poz = {temp.level: [(temp.multiple_data, list_poz)]}
         temp.add_list_poz(list_poz)
         return temp
 
     else:
-        raise ValueError(f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(parameter_list)}')
+        raise ValueError(
+            f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(parameter_list)}')
 
 
-
-def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), EffectiveName="Мультивыноска v1.1") -> list:
-
+def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
+                           EffectiveName="Мультивыноска v1.1") -> list:
     sset = aDoc.PickfirstSelectionSet
     list_poz = []
     for t in sset:
@@ -63,9 +66,8 @@ def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"), Eff
     return list_poz
 
 
-
 if __name__ == '__main__':
-    elem_list =[]
+    elem_list = []
     n = int(input('Количество участков : '))
     for _ in range(n):
         input('Выбери следующую группу элементов и нажми ENTER')
@@ -76,12 +78,9 @@ if __name__ == '__main__':
         else:
             elem_list.append(const_element)
 
-
     for element in elem_list:
         print(f'Марка конструкции : {element.constr_name}')
         print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
         print(f'{element.p1_coord=}, {type(element.p1_coord[0])}')
         # if "__" not in i:
         #     print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
-
-
