@@ -63,7 +63,12 @@ class Parameters:
             self.__dict__[key] = value
 
     def __str__(self):
-        pass
+        rezult='\n___Начало блока Параметры:___\n'
+        for atr_name in self.__dict__:
+            rezult += f'{atr_name} : {self.__dict__[atr_name]} \n'
+        rezult+='___Конец блока Параметры___\n'
+        return rezult
+
 
 
 if __name__ == '__main__':

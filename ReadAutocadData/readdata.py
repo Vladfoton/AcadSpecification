@@ -16,8 +16,6 @@ aDoc = app.ActiveDocument
 msp = aDoc.ModelSpace
 
 aDoc.SendCommand("_REGEN ")
-# sset = aDoc.PickfirstSelectionSet
-
 
 def find_and_read_parameters(sset) -> Parameters:
     parameter_list = []
@@ -25,7 +23,6 @@ def find_and_read_parameters(sset) -> Parameters:
         if acad_obj.EntityName == "AcDbBlockReference":
             if acad_obj.EffectiveName == "parameters":
                 parameter_list.append(acad_obj)
-    print(f'{parameter_list=}')
     if len(parameter_list) == 1:
         temp = Parameters(
             {atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
@@ -72,7 +69,7 @@ if __name__ == '__main__':
             elem_list.append(const_element)
 
     for element in elem_list:
-        print()
+        print(element)
         print(f'Марка конструкции : {element.constr_name}')
         print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
         # print(f'{element.contour=}, {type(element.contour[0])}')
