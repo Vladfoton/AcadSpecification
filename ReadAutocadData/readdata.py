@@ -18,22 +18,29 @@ msp = aDoc.ModelSpace
 aDoc.SendCommand("_REGEN ")
 
 def find_and_read_parameters(sset) -> Parameters:
-    parameter_list = []
+    parameter_list = []  # Список блоков parameters
     for acad_obj in sset:
         if acad_obj.EntityName == "AcDbBlockReference":
             if acad_obj.EffectiveName == "parameters":
                 parameter_list.append(acad_obj)
-    if len(parameter_list) == 1:
+
+    for parameter_elem in parameter_list:
         temp = Parameters(
-            {atr_data.TagString: atr_data.TextString for atr_data in parameter_list.pop(0).GetAttributes()})
+            {atr_data.TagString: atr_data.TextString for atr_data in parameter_elem.GetAttributes()})
         list_poz = select_object_in_rect(temp.contour)
         list_poz = {temp.level: [(temp.multiple_data, list_poz)]}
         temp.add_list_poz(list_poz)
-        return temp
+        const_element = temp
+        if const_element in elem_list:
+            print('***')
+            print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
+            elem_list[elem_list.index(const_element)] += const_element
+        else:
+            elem_list.append(const_element)
 
-    else:
-        raise ValueError(
-            f'В выделеном фрагменте количество блоков параметров не равно 1. Количество найденных блоков {len(parameter_list)}')
+
+    # return temp
+
 
 
 def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
@@ -56,18 +63,27 @@ def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
 
 if __name__ == '__main__':
     elem_list = []
-    n = int(input('Количество участков : '))
-    for _ in range(n):
+    # while True:
+    #     try:
+    #         n = int(input('Количество участков : '))
+    #         if n > 0:
+    #             break
+    #         else:
+    #             raise ValueError
+    #     except:
+    #         print('Введите число больше 0')
+    # for _ in range(n):
 
-        input('Выбери следующую группу элементов и нажми ENTER')
-        sset = aDoc.PickfirstSelectionSet
-        const_element = find_and_read_parameters(sset)
-        if const_element in elem_list:
-            print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
-            elem_list[elem_list.index(const_element)] += const_element
-        else:
-            elem_list.append(const_element)
+    input('Выбери следующую группу элементов и нажми ENTER')
+    sset = aDoc.PickfirstSelectionSet
 
+    find_and_read_parameters(sset)
+        # if const_element in elem_list:
+        #     print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
+        #     elem_list[elem_list.index(const_element)] += const_element
+        # else:
+        #     elem_list.append(const_element)
+    print(elem_list, len(elem_list))
     for element in elem_list:
         print(element)
         print(f'Марка конструкции : {element.constr_name}')
