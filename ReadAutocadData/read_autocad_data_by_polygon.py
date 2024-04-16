@@ -35,11 +35,11 @@ def select_object_in_rect(coord_list: list):
             if acad_obj.EffectiveName == "Мультивыноска v1.1":
                 str1 = acad_obj.GetAttributes()[0].TextString
                 str2 = acad_obj.GetAttributes()[1].TextString
-                print(str1, str2)
+                # print(str1, str2)
                 list_poz.append(f'{str1}\\P{str2}' if str2 else str1)
         elif acad_obj.EntityName == "AcDbMLeader":
             str1 = acad_obj.TextString
-            print(str1)
+            # print(str1)
             list_poz.append(str1)
 
     return list_poz

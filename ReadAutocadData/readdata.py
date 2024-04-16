@@ -32,8 +32,7 @@ def find_and_read_parameters(sset) -> Parameters:
         temp.add_list_poz(list_poz)
         const_element = temp
         if const_element in elem_list:
-            print('***')
-            print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
+            # print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
             elem_list[elem_list.index(const_element)] += const_element
         else:
             elem_list.append(const_element)
@@ -63,29 +62,13 @@ def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
 
 if __name__ == '__main__':
     elem_list = []
-    # while True:
-    #     try:
-    #         n = int(input('Количество участков : '))
-    #         if n > 0:
-    #             break
-    #         else:
-    #             raise ValueError
-    #     except:
-    #         print('Введите число больше 0')
-    # for _ in range(n):
-
-    input('Выбери следующую группу элементов и нажми ENTER')
+    input('Выбери  группу элементов и нажми ENTER')
+    print()
     sset = aDoc.PickfirstSelectionSet
-
     find_and_read_parameters(sset)
-        # if const_element in elem_list:
-        #     print(elem_list[elem_list.index(const_element)].list_poz, const_element.list_poz)
-        #     elem_list[elem_list.index(const_element)] += const_element
-        # else:
-        #     elem_list.append(const_element)
-    print(elem_list, len(elem_list))
+
     for element in elem_list:
-        print(element)
+        # print(element)
         print(f'Марка конструкции : {element.constr_name}')
         print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
         # print(f'{element.contour=}, {type(element.contour[0])}')
