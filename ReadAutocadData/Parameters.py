@@ -7,6 +7,7 @@ class Parameters:
     def __init__(self, acad_block_parameters: dict):
         for key, value in acad_block_parameters.items():
             self.__setattr__(key.lower(), value)
+
         #Формирование словаря с обозначениями и стандартами и классами
         temp = {}
         try:

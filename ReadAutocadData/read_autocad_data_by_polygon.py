@@ -8,7 +8,7 @@ acad = win32com.client.Dispatch("AutoCAD.Application")
 acadDoc = acad.ActiveDocument
 acadModel = acad.ActiveDocument.ModelSpace
 
-
+# acadDoc.SendCommand("_REGEN")
 def select_object_in_rect(coord_list: list):
     def APoint(x, y, z=0):
         return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, (x, y, z))
@@ -18,6 +18,8 @@ def select_object_in_rect(coord_list: list):
 
     def aVariant(vObject):
         return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_DISPATCH, (vObject))
+
+    # acadModel.SendCommand("_REGEN")
 
     aaa = acadDoc.ActiveSelectionSet
     aaa.clear()
