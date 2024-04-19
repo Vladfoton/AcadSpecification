@@ -42,6 +42,7 @@ if __name__ == '__main__':
 
     filelistFramework = get_file_list_from_folder(curent_dir, 'Каркасы')
     filelistemb_parts = get_file_list_from_folder(curent_dir, "Закладные детали")
+    os.chdir(curent_dir)
     list_specification = []  # список спецификаций сборочных единиц
     list_of_embeded_parts = []  # список закладных деталей
     list_objects = []  # список обрабатываемых объектов
@@ -61,3 +62,4 @@ if __name__ == '__main__':
     #test print
     for element in elem_list:
                 print(element)
+                print(element.read_VD_file())

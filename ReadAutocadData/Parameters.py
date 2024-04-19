@@ -1,6 +1,11 @@
 import win32com.client
 from ReadAutocadData.read_autocad_data_by_polygon import select_object_in_rect
 import pythoncom
+import os
+import openpyxl
+from Service.Error_reports import *
+import pathlib
+from pathlib import Path
 
 
 class Parameters:
@@ -49,6 +54,37 @@ class Parameters:
     def add_list_poz(self, list_poz: dict):
         # print("функция add_list_poz")
         self.list_poz_str = list_poz
+        print(f'{list_poz=}')
+
+    def create_object_list(self):
+        pass
+
+    def read_VD_file(self):
+        '''чтение файла ведомости деталей
+        :argument filename - имя файда из которого читаются данные
+        :return data -словарь вида <марка позиции>: <длина позиции>'''
+        filename = self.vd_file_name
+        curent_dir = pathlib.Path.cwd()
+        try:
+            folder_path = Path(curent_dir, 'Ведомость деталей')
+            os.chdir(folder_path)
+        except:
+            error_report_No_exit(f"Папка {folder_path} не найдена.")
+
+        try:
+            book = openpyxl.open(filename, read_only=True)
+            sheet = book.active
+            pos = [sheet[i][0].value for i in range(1, sheet.max_row + 1)]
+            lenght = [sheet[i][1].value for i in range(1, sheet.max_row + 1)]
+            data = dict(zip(pos, lenght))
+            book.close()
+        except FileNotFoundError:
+            error_report_No_exit(f"Файл {filename} не найден.")
+            return {}
+        except:
+            error_report_end_exit(f"Ошибка в файле {filename}. Откорректируйте файл и перезапустите программу")
+
+        return data
 
     def __setattr__(self, key, value):
         try:

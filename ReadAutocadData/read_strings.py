@@ -221,7 +221,6 @@ def read_strings(firststring: str, secondstring: str, veddetaley, koefficient=1.
                 firststring, secondstring),
             "klass": find_klass(firststring, veddetaley),
             "func": int(find_function(firststring, veddetaley))
-
             }
 
 
