@@ -54,14 +54,10 @@ if __name__ == '__main__':
     msp = aDoc.ModelSpace
 
     aDoc.SendCommand("_REGEN ")  #Регенерация пространства модели в Autocad
-    input('Выбери  группу элементов и нажми ENTER')
+    input('Выбери  группу элементов c зонами армирования и нажми ENTER')
     sset = aDoc.PickfirstSelectionSet
     elem_list = find_and_read_parameters(sset)
 
+    #test print
     for element in elem_list:
-        print(element)
-        # print(f'Марка конструкции : {element.constr_name}')
-        # print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
-        # # print(f'{element.contour=}, {type(element.contour[0])}')
-        # # if "__" not in i:
-        # #     print(i, element.__getattribute__(i), type(element.__getattribute__(i)), sep=" --> ")
+                print(element)
