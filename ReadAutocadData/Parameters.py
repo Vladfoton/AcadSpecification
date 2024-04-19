@@ -1,5 +1,5 @@
 import win32com.client
-from read_autocad_data_by_polygon import select_object_in_rect
+from ReadAutocadData.read_autocad_data_by_polygon import select_object_in_rect
 import pythoncom
 
 
@@ -29,10 +29,10 @@ class Parameters:
 
     def __add__(self, other):
         if isinstance(other, self.__class__) and self == other:
-            if other.level in self.list_poz:
-                self.list_poz[other.level].append((other.multiple_data, other.list_poz[other.level][0][1]))
+            if other.level in self.list_poz_str:
+                self.list_poz_str[other.level].append((other.multiple_data, other.list_poz_str[other.level][0][1]))
             else:
-                self.list_poz[other.level] = [(other.multiple_data, other.list_poz[other.level][0][1])]
+                self.list_poz_str[other.level] = [(other.multiple_data, other.list_poz_str[other.level][0][1])]
             # print("функция __add__", self.list_poz)
             return self
         else:  # Если объекты не совместимы или отличаются параметры (имя конструкции, коэффициэнт умножения для ВРС,
@@ -47,7 +47,7 @@ class Parameters:
 
     def add_list_poz(self, list_poz: dict):
         # print("функция add_list_poz")
-        self.list_poz = list_poz
+        self.list_poz_str = list_poz
 
     def __setattr__(self, key, value):
         try:

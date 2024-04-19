@@ -8,8 +8,8 @@ import copy
 import os
 import pathlib
 import win32com.client
-from Parameters import Parameters
-from read_autocad_data_by_polygon import select_object_in_rect
+from ReadAutocadData.Parameters import Parameters
+from ReadAutocadData.read_autocad_data_by_polygon import select_object_in_rect
 
 app = win32com.client.Dispatch("AutoCAD.Application")
 aDoc = app.ActiveDocument
@@ -17,7 +17,13 @@ msp = aDoc.ModelSpace
 
 aDoc.SendCommand("_REGEN ")
 
-def find_and_read_parameters(sset) -> Parameters:
+def find_and_read_parameters(sset, elem_list=[]) -> Parameters:
+    '''
+
+    :param sset:  Набор объектов Autocad
+    :param elem_list: список элементов объектов Parameters
+    :return: Дополненный список объектов Parameters
+    '''
     parameter_list = []  # Список блоков parameters
     for acad_obj in sset:
         if acad_obj.EntityName == "AcDbBlockReference":
@@ -36,6 +42,7 @@ def find_and_read_parameters(sset) -> Parameters:
             elem_list[elem_list.index(const_element)] += const_element
         else:
             elem_list.append(const_element)
+    return elem_list
 
 
     # return temp
@@ -61,14 +68,13 @@ def read_autocad_selection(EntityName=("AcDbBlockReference", "AcDbMLeader"),
 
 
 if __name__ == '__main__':
-    elem_list = []
+#     elem_list = []
     input('Выбери  группу элементов и нажми ENTER')
-    print()
     sset = aDoc.PickfirstSelectionSet
-    find_and_read_parameters(sset)
+    elem_list = find_and_read_parameters(sset)
 
     for element in elem_list:
-        # print(element)
+        # print(element, type(element))
         print(f'Марка конструкции : {element.constr_name}')
         print(f"Позиции: {element.__getattribute__('list_poz')}", '\n')
         # print(f'{element.contour=}, {type(element.contour[0])}')
