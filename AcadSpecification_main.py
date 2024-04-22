@@ -31,10 +31,9 @@ def get_file_list_from_folder(path, folder_name: str) -> list:
 
 
 if __name__ == '__main__':
-    # os.chdir("..")
+    #Назначение каталогов
     curent_dir = pathlib.Path.cwd()  # Текущая рабочая папка
     os.chdir(curent_dir)
-    # Пути к файлам
     framework_Path = Path(curent_dir, "Каркасы")  # Путь в папку с каркасами
     embedded_parts_Path = Path(curent_dir, "Закладные детали")  # Путь в папку с закладными
     Specification_Path = Path(curent_dir, "Спецификации и ВРС")  # Путь в папку с результирующими спецификациями
@@ -49,17 +48,10 @@ if __name__ == '__main__':
     VRSRound = 2  # сколько знаков после разделителя при округлении в ВРС
     list_zones = []  # список объектов Parameters
 
- #_________________
-    app = win32com.client.Dispatch("AutoCAD.Application")   # Подключение к AutoCAD.Application
-    aDoc = app.ActiveDocument
-    msp = aDoc.ModelSpace
+ #_________________Чтение данных из autocad____
+    elem_list = find_and_read_parameters(framework_Path, embedded_parts_Path, Specification_Path, Ved_det_Path)
 
-    aDoc.SendCommand("_REGEN ")  #Регенерация пространства модели в Autocad
-    input('Выбери  группу элементов c зонами армирования и нажми ENTER')
-    sset = aDoc.PickfirstSelectionSet
-    elem_list = find_and_read_parameters(sset)
-
-    #test print
+#test print
     for element in elem_list:
                 print(element)
                 print(element.read_VD_file())

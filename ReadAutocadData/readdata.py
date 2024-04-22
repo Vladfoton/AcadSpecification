@@ -17,13 +17,23 @@ msp = aDoc.ModelSpace
 
 aDoc.SendCommand("_REGEN ")
 
-def find_and_read_parameters(sset, elem_list=[]) -> Parameters:
+def find_and_read_parameters(framework_Path:str, embedded_parts_Path:str, specification_Path:str, ved_det_Path:str) -> Parameters:
     '''
 
     :param sset:  Набор объектов Autocad
     :param elem_list: список элементов объектов Parameters
     :return: Дополненный список объектов Parameters
     '''
+    #__________чтение данных из Autocad________
+    app = win32com.client.Dispatch("AutoCAD.Application")   # Подключение к AutoCAD.Application
+    aDoc = app.ActiveDocument
+    msp = aDoc.ModelSpace
+
+    aDoc.SendCommand("_REGEN ")  #Регенерация пространства модели в Autocad
+    input('Выбери  группу элементов c зонами армирования и нажми ENTER')
+    sset = aDoc.PickfirstSelectionSet
+
+    elem_list=[]
     parameter_list = []  # Список блоков parameters
     for acad_obj in sset:
         if acad_obj.EntityName == "AcDbBlockReference":
@@ -32,7 +42,7 @@ def find_and_read_parameters(sset, elem_list=[]) -> Parameters:
 
     for parameter_elem in parameter_list:
         temp = Parameters(
-            {atr_data.TagString: atr_data.TextString for atr_data in parameter_elem.GetAttributes()})
+            {atr_data.TagString: atr_data.TextString for atr_data in parameter_elem.GetAttributes()}, framework_Path, embedded_parts_Path, specification_Path, ved_det_Path)
         list_poz = select_object_in_rect(temp.contour)
         list_poz = {temp.level: [(temp.multiple_data, list_poz)]}
         temp.add_list_poz(list_poz)

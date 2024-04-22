@@ -7,11 +7,19 @@ from Service.Error_reports import *
 import pathlib
 from pathlib import Path
 
-
+# framework_Path = Path(curent_dir, "Каркасы")  # Путь в папку с каркасами
+#     embedded_parts_Path = Path(curent_dir, "Закладные детали")  # Путь в папку с закладными
+#     Specification_Path = Path(curent_dir, "Спецификации и ВРС")  # Путь в папку с результирующими спецификациями
+#     Ved_det_Path = Path(curent_dir, "Ведомость деталей")  # Путь в папку с вед_деталей
 class Parameters:
-    def __init__(self, acad_block_parameters: dict):
+    def __init__(self, acad_block_parameters: dict, framework_Path:str, embedded_parts_Path:str, specification_Path:str, ved_det_Path:str):
+        self.framework_Path=framework_Path
+        self.embedded_parts_Path=embedded_parts_Path
+        self.specification_Path = specification_Path
+        self.ved_det_Path = ved_det_Path
         for key, value in acad_block_parameters.items():
             self.__setattr__(key.lower(), value)
+        self.ved_det_dict = self.read_VD_file()
 
         #Формирование словаря с обозначениями и стандартами и классами
         temp = {}
@@ -64,12 +72,11 @@ class Parameters:
         :argument filename - имя файда из которого читаются данные
         :return data -словарь вида <марка позиции>: <длина позиции>'''
         filename = self.vd_file_name
-        curent_dir = pathlib.Path.cwd()
+
         try:
-            folder_path = Path(curent_dir, 'Ведомость деталей')
-            os.chdir(folder_path)
+            os.chdir(self.ved_det_Path)
         except:
-            error_report_No_exit(f"Папка {folder_path} не найдена.")
+            error_report_No_exit(f"Папка {self.ved_det_Path} не найдена.")
 
         try:
             book = openpyxl.open(filename, read_only=True)
